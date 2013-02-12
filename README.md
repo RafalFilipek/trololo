@@ -9,3 +9,7 @@
 7. Get your private token from gitlat
 8. Login
 9. Cry - _WIP_
+
+## Screenshot
+
+http://i.imgur.com/E3a9lJp.png
