@@ -1,0 +1,52 @@
+<div id="home">
+	<div class="top">
+		<ul class="columns-headers">
+			<li class="header">TODO</li>
+			<li class="header">WIP</li>
+			<li class="header">DONE</li>
+		</ul>
+		<ul class="toolbar-right">
+			<li ng-show="projects">
+				<select ng-model="currentProject" ng-options="project.name for project in projects">
+				</select>
+			</li>
+			<li ng-show="user">Hello <strong>{{ user.name || user.username }}</strong>!</li>
+		</ul>
+	</div>
+
+	<script id="issue-template" type="text/ng-template">
+		<h2>
+			{{ issue.title }}
+			<span ng-show="issue.loading">...</span>
+		</h2>
+		<p class="desc" ng-show="issue.description">
+			{{ issue.description }}
+		</p>
+		<p>
+			<span ng-show="issue.assignee">
+				<i class="icon-lock"></i>
+				{{ issue.assignee.name || issue.assignee.username }}
+			</span>
+			<span class="pull-right">
+				{{ issue.created_at | formatDate | date:'HH:mm dd.MM.yyyy' }}
+				<a href="#"><i class="icon-link"></i></a>
+			</span>
+		</p>
+	</script>
+
+	<div class="issues">
+		<div sortable class="column" type="todo">
+			<div class="issue" ng-repeat="issue in issues.todo" ng-include src="'issue-template'">
+			</div>
+		</div>
+		<div sortable class="column" items="" type="wip">
+			<div class="issue" ng-repeat="issue in issues.wip" ng-include src="'issue-template'">
+			</div>
+		</div>
+		<div sortable class="column" items="" type="done">
+			<div class="issue" ng-repeat="issue in issues.done" ng-include src="'issue-template'">
+			</div>
+		</div>
+	</div>
+
+</div>

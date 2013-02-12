@@ -1,0 +1,115 @@
+html, body {
+	font-family: Arial, Helvetica, sans-serif;
+	background: url('../images/bg.gif') top left transparent;
+	padding: 0;
+	margin: 0;
+	font-family: Arial;
+	min-width: 1020px;
+}
+
+input, select, textarea {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+.x-hide {
+	display: none;
+}
+
+#home {
+
+	.top {
+		background-color: #52525F;
+		color: #fff;
+		font-family: Arial;
+		overflow: hidden;
+		line-height: 25px;
+
+		.columns-headers {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+
+			li {
+				float: left;
+				font-size: 25px;
+				padding: 10px;
+				font-weight: normal;
+				width: 300px;
+			}
+
+		}
+
+		.toolbar-right {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			float: right;
+
+			li {
+				float: left;
+				padding: 10px;
+				font-weight: normal;
+			}
+		}
+	}
+
+}
+
+.issues {
+
+	margin-top: 10px;
+
+	.column {
+		float: left;
+		overflow: hidden;
+		width: 300px;
+		padding: 10px;
+	}
+}
+
+.issue {
+	background-color: #fff;
+	margin-bottom: 20px;
+	padding: 10px;
+	box-shadow: 0 0 4px rgba(0,0,0,0.4);
+	color: #525261;
+	width: 280px;
+
+	h2 {
+		font-size: 14px;
+		line-height: 18px;
+		margin: 0;
+		padding: 0;
+		padding-bottom: 10px;
+		margin-bottom: 10px;
+		border-bottom: 1px solid #DDDDDD;
+	}
+
+	 p {
+		font-size: 11px;
+		line-height: 15px;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+	}
+
+	.desc {
+		font-size: 11px;
+		line-height: 15px;
+		margin: 0;
+		padding: 0;
+		padding-bottom: 10px;
+		margin-bottom: 10px;
+		border-bottom: 1px solid #DDDDDD;
+	}
+
+	a {
+		color: #296DC9;
+		text-decoration: none;
+	}
+
+	.pull-right {
+		float: right;
+	}
+}

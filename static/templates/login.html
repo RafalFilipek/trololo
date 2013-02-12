@@ -1,0 +1,11 @@
+<form ng-submit="login()">
+	<fieldset>
+		<div>
+			<input type="text" ng-disabled="isChecking" ng-model="private_token" name="private_token" placeholder="Your private token"> <span ng-show="isChecking">ceep calm and wait...</span>
+		</div>
+		<div ng-show="invalidToken">Your token is bad and you should bad.</div>
+		<div>
+			<input ng-disabled="isChecking" type="submit" value="Login">
+		</div>
+	</fieldset>
+</form>
