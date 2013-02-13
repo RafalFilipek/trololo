@@ -42,7 +42,6 @@ HomeCtrl = ($scope, $rootScope, gitlab)->
 	gitlab.get({action:'projects'}, (response)->
 		$rootScope.isLogged = response.authorized
 		$scope.projects = response.data
-		$scope.currentProject = $scope.projects[0].id
 	)
 
 	###

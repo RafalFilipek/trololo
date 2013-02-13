@@ -54,8 +54,7 @@ HomeCtrl = function($scope, $rootScope, gitlab) {
     action: 'projects'
   }, function(response) {
     $rootScope.isLogged = response.authorized;
-    $scope.projects = response.data;
-    return $scope.currentProject = $scope.projects[0].id;
+    return $scope.projects = response.data;
   });
   /*
   	Yep, test crap section.
