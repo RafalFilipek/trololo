@@ -13,12 +13,27 @@ input, select, textarea {
 .x-hide {
   display: none; }
 
-#home .top {
+#home .bar, #home .top, #home .footer {
   background-color: #52525F;
   color: #fff;
   font-family: Arial;
   overflow: hidden;
   line-height: 25px; }
+  #home .bar ul, #home .top ul, #home .footer ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    #home .bar ul li, #home .top ul li, #home .footer ul li {
+      float: left;
+      padding: 10px;
+      font-weight: normal; }
+  #home .bar .toolbar-right, #home .top .toolbar-right, #home .footer .toolbar-right {
+    float: right; }
+#home .top {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.7); }
   #home .top .columns-headers {
     list-style-type: none;
     margin: 0;
@@ -29,18 +44,16 @@ input, select, textarea {
       padding: 10px;
       font-weight: normal;
       width: 300px; }
-  #home .top .toolbar-right {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    float: right; }
-    #home .top .toolbar-right li {
-      float: left;
-      padding: 10px;
-      font-weight: normal; }
+#home .footer {
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.7);
+  width: 100%;
+  position: fixed;
+  bottom: 0; }
 
 .issues {
-  margin-top: 10px; }
+  margin-top: 10px;
+  padding: 40px 0;
+  overflow: hidden; }
   .issues .column {
     float: left;
     overflow: hidden;
