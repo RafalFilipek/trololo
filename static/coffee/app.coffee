@@ -1,4 +1,4 @@
-app = angular.module('app', ['ngResource', 'ngCookies'])
+app = angular.module('app', ['ngResource', 'ngCookies', 'ui'])
 	.config(($routeProvider, $locationProvider)->
 		$routeProvider
 			.when('/', {
