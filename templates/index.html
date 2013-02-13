@@ -5,15 +5,18 @@
 	<title>Trololo</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/icons/mfglabs_iconset.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/select2/select2.css') }}">
 </head>
 <body ng-controller="EntryPointCtrl">
 	<div ng-view></div>
+	<script src="{{ url_for('static', filename='js/vendors/jquery/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/vendors/jquery-ui/jquery-ui.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/vendors/lodash/lodash.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/vendors/select2/select2.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/vendors/angularjs/angular.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/vendors/angularjs/angular-resource.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/vendors/angularjs/angular-cookies.js') }}"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/1.0.0-rc.3/lodash.min.js"></script>
+	<script src="{{ url_for('static', filename='js/vendors/angular-ui/angular-ui.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/filters.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/directives.js') }}"></script>
