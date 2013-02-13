@@ -55,7 +55,7 @@ HomeCtrl = function($scope, $rootScope, gitlab) {
   }, function(response) {
     $rootScope.isLogged = response.authorized;
     $scope.projects = response.data;
-    return $scope.currentProject = $scope.projects[0];
+    return $scope.currentProject = $scope.projects[0].id;
   });
   /*
   	Yep, test crap section.
@@ -67,7 +67,7 @@ HomeCtrl = function($scope, $rootScope, gitlab) {
   return $scope.$watch('currentProject', function() {
     if ($scope.currentProject) {
       return gitlab.get({
-        action: 'projects/' + $scope.currentProject.id + '/issues'
+        action: 'projects/' + $scope.currentProject + '/issues'
       }, function(response) {
         return $scope.issues = _.groupBy(response.data, setState);
       });
