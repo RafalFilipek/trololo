@@ -42,7 +42,7 @@ HomeCtrl = ($scope, $rootScope, gitlab)->
 	gitlab.get({action:'projects'}, (response)->
 		$rootScope.isLogged = response.authorized
 		$scope.projects = response.data
-		$scope.currentProject = $scope.projects[0]
+		$scope.currentProject = $scope.projects[0].id
 	)
 
 	###
@@ -60,7 +60,7 @@ HomeCtrl = ($scope, $rootScope, gitlab)->
 
 	$scope.$watch('currentProject', ->
 		if $scope.currentProject
-			gitlab.get({action:'projects/' + $scope.currentProject.id + '/issues'}, (response)->
+			gitlab.get({action:'projects/' + $scope.currentProject + '/issues'}, (response)->
 				$scope.issues = _.groupBy(response.data, setState)
 			)
 	)
