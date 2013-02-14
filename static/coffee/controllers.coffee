@@ -99,7 +99,10 @@ HomeCtrl = ($scope, $rootScope, gitlab)->
 			gitlab.get('projects/' + $scope.current.project + '/milestones').success((response)->
 				$scope.milestones = response.data
 				gitlab.get('projects/' + $scope.current.project + '/issues').success((response)->
-					$scope.issues = _.groupBy(response.data, setState)
+					$scope.issues = _.extend(
+						{ 'todo': [], 'wip': [], 'done': [], 'trash': [] },
+						_.groupBy(response.data, setState)
+					)
 				)
 			)
 	)

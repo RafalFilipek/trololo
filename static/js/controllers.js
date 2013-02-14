@@ -78,7 +78,12 @@ HomeCtrl = function($scope, $rootScope, gitlab) {
       return gitlab.get('projects/' + $scope.current.project + '/milestones').success(function(response) {
         $scope.milestones = response.data;
         return gitlab.get('projects/' + $scope.current.project + '/issues').success(function(response) {
-          return $scope.issues = _.groupBy(response.data, setState);
+          return $scope.issues = _.extend({
+            'todo': [],
+            'wip': [],
+            'done': [],
+            'trash': []
+          }, _.groupBy(response.data, setState));
         });
       });
     }
