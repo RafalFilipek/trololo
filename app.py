@@ -7,7 +7,7 @@ from api import api
 
 app = Flask(__name__)
 
-app.debug = True
+app.config.from_pyfile('config.cfg')
 
 app.register_blueprint(api)
 
