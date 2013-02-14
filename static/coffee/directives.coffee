@@ -1,3 +1,7 @@
+# No magic.
+# Simplest version of AngularJS directive
+# and basic usage of jQueryUI Sortable.
+
 app.directive('sortable', ->
 	{
 		'link': (scope, element, attrs)->
