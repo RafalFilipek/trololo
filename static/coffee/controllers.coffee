@@ -1,7 +1,13 @@
+
+# Nothing to do here. GitLab service will notify application
+# if user is logged or not.
+
 EntryPointCtrl = ($scope, $location, $rootScope, gitlab)->
-	gitlab.get({action:'check'}, (response)->
-		$rootScope.isLogged = response.authorized
-	)
+	gitlab.get('check')
+
+# All we have to do in LoginCtrl is grab user token and
+# execute `check` request. `success` callback is just a
+# dump function to show or hide some messages.
 
 LoginCtrl = ($scope, $location,  $cookies, $rootScope, gitlab)->
 	$scope.invalidToken = false
@@ -9,57 +15,91 @@ LoginCtrl = ($scope, $location,  $cookies, $rootScope, gitlab)->
 
 	$scope.login = ->
 		$scope.isChecking = true
-		gitlab.get({
-			action:'check',
-			private_token: $scope.private_token
-		}, (response)->
+		gitlab.get('check', {'private_token': $scope.private_token})
+		.success((response)->
 			$scope.isChecking = false
 			if response.authorized
 				$cookies.private_token = $scope.private_token
 				$scope.invalidToken = false
-				$rootScope.isLogged = true
 			else
 				$scope.invalidToken = true
 		)
 
+# Big one.
+
 HomeCtrl = ($scope, $rootScope, gitlab)->
+
+	# Some defaults.
+
 	$scope.user = false
-	$scope.issues = {}
-	currentDragged = undefined;
+	$scope.current = {
+		'project': undefined
+		'milestone': undefined
+	}
+	$scope.projects = undefined
+	$scope.milestones = undefined
+	$scope.issues = undefined
+	@currentDragged = undefined
 
-	$scope.setDraggable = (repr)->
-		currentDragged = repr
+	# Two function used by `sortable` directive.
+	# `currentDragged` is just a simple object
+	# with two keys: type, key.
+	#
+	# In `moveDragged` function I'm using `splice`
+	# method like a boss to move issue.
 
-	$scope.moveDragged = (type, index)->
-		item = $scope.issues[currentDragged.type][currentDragged.index]
-		$scope.issues[currentDragged.type].splice(currentDragged.index, 1)
+	$scope.setDraggable = (repr)=>
+		@currentDragged = repr
+
+	$scope.moveDragged = (type, index)=>
+		item = $scope.issues[@currentDragged.type][@currentDragged.index]
+		$scope.issues[@currentDragged.type].splice(@currentDragged.index, 1)
 		$scope.issues[type].splice(index, 0, item)
 
-	gitlab.get({action:'user'}, (response)->
-		$rootScope.isLogged = response.authorized
+	# First we need some informations about user
+	# Mainly to display "Hello" message.
+
+	gitlab.get('user').success((response)->
 		$scope.user = response.data
 	)
-	gitlab.get({action:'projects'}, (response)->
-		$rootScope.isLogged = response.authorized
+
+	# Projects are quite important. Just another
+	# gitlab GET request.
+
+	gitlab.get('projects').success((response)->
 		$scope.projects = response.data
 	)
 
-	###
-	Yep, test crap section.
-	###
+	# Simple function to define issue state.
+	# It's called every time new issues are
+	# greabbed from server.
+
 	setState = (issue)->
-		issue.type = if _.contains(issue.labels, 'Performance')
-			'todo'
-		else if issue.labels.length is 0
-			'todo'
-		else if _.contains(issue.labels, 'feature')
-			'wip'
-		else 'done'
+		states = ['todo', 'wip', 'done', 'trash']
+		labels = issue.labels
+		for state in states
+			return state if _.contains(labels, state)
+		return 'todo'
 
+	# Another silly function to filter issues by milestone.
 
-	$scope.$watch('currentProject', ->
-		if $scope.currentProject
-			gitlab.get({action:'projects/' + $scope.currentProject + '/issues'}, (response)->
-				$scope.issues = _.groupBy(response.data, setState)
+	$scope.filterByMilestone = (issue)->
+		currentMilestone = parseInt($scope.current.milestone, 10)
+		if _.isNumber(currentMilestone) and not _.isNaN(currentMilestone)
+			return (issue.milestone or {}).id is currentMilestone
+		else
+			return true
+
+	# Every time user decide to change current project callback
+	# function will grab milestones and issues.
+
+	$scope.$watch('current.project', ->
+		if $scope.current.project
+			$scope.current.milestones = undefined
+			gitlab.get('projects/' + $scope.current.project + '/milestones').success((response)->
+				$scope.milestones = response.data
+				gitlab.get('projects/' + $scope.current.project + '/issues').success((response)->
+					$scope.issues = _.groupBy(response.data, setState)
+				)
 			)
 	)

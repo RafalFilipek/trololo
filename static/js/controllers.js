@@ -2,11 +2,7 @@
 var EntryPointCtrl, HomeCtrl, LoginCtrl;
 
 EntryPointCtrl = function($scope, $location, $rootScope, gitlab) {
-  return gitlab.get({
-    action: 'check'
-  }, function(response) {
-    return $rootScope.isLogged = response.authorized;
-  });
+  return gitlab.get('check');
 };
 
 LoginCtrl = function($scope, $location, $cookies, $rootScope, gitlab) {
@@ -14,15 +10,13 @@ LoginCtrl = function($scope, $location, $cookies, $rootScope, gitlab) {
   $scope.isChecking = false;
   return $scope.login = function() {
     $scope.isChecking = true;
-    return gitlab.get({
-      action: 'check',
-      private_token: $scope.private_token
-    }, function(response) {
+    return gitlab.get('check', {
+      'private_token': $scope.private_token
+    }).success(function(response) {
       $scope.isChecking = false;
       if (response.authorized) {
         $cookies.private_token = $scope.private_token;
-        $scope.invalidToken = false;
-        return $rootScope.isLogged = true;
+        return $scope.invalidToken = false;
       } else {
         return $scope.invalidToken = true;
       }
@@ -31,44 +25,61 @@ LoginCtrl = function($scope, $location, $cookies, $rootScope, gitlab) {
 };
 
 HomeCtrl = function($scope, $rootScope, gitlab) {
-  var currentDragged, setState;
+  var setState,
+    _this = this;
   $scope.user = false;
-  $scope.issues = {};
-  currentDragged = void 0;
+  $scope.current = {
+    'project': void 0,
+    'milestone': void 0
+  };
+  $scope.projects = void 0;
+  $scope.milestones = void 0;
+  $scope.issues = void 0;
+  this.currentDragged = void 0;
   $scope.setDraggable = function(repr) {
-    return currentDragged = repr;
+    return _this.currentDragged = repr;
   };
   $scope.moveDragged = function(type, index) {
     var item;
-    item = $scope.issues[currentDragged.type][currentDragged.index];
-    $scope.issues[currentDragged.type].splice(currentDragged.index, 1);
+    item = $scope.issues[_this.currentDragged.type][_this.currentDragged.index];
+    $scope.issues[_this.currentDragged.type].splice(_this.currentDragged.index, 1);
     return $scope.issues[type].splice(index, 0, item);
   };
-  gitlab.get({
-    action: 'user'
-  }, function(response) {
-    $rootScope.isLogged = response.authorized;
+  gitlab.get('user').success(function(response) {
     return $scope.user = response.data;
   });
-  gitlab.get({
-    action: 'projects'
-  }, function(response) {
-    $rootScope.isLogged = response.authorized;
+  gitlab.get('projects').success(function(response) {
     return $scope.projects = response.data;
   });
-  /*
-  	Yep, test crap section.
-  */
-
   setState = function(issue) {
-    return issue.type = _.contains(issue.labels, 'Performance') ? 'todo' : issue.labels.length === 0 ? 'todo' : _.contains(issue.labels, 'feature') ? 'wip' : 'done';
+    var labels, state, states, _i, _len;
+    states = ['todo', 'wip', 'done', 'trash'];
+    labels = issue.labels;
+    for (_i = 0, _len = states.length; _i < _len; _i++) {
+      state = states[_i];
+      if (_.contains(labels, state)) {
+        return state;
+      }
+    }
+    return 'todo';
   };
-  return $scope.$watch('currentProject', function() {
-    if ($scope.currentProject) {
-      return gitlab.get({
-        action: 'projects/' + $scope.currentProject + '/issues'
-      }, function(response) {
-        return $scope.issues = _.groupBy(response.data, setState);
+  $scope.filterByMilestone = function(issue) {
+    var currentMilestone;
+    currentMilestone = parseInt($scope.current.milestone, 10);
+    if (_.isNumber(currentMilestone) && !_.isNaN(currentMilestone)) {
+      return (issue.milestone || {}).id === currentMilestone;
+    } else {
+      return true;
+    }
+  };
+  return $scope.$watch('current.project', function() {
+    if ($scope.current.project) {
+      $scope.current.milestones = void 0;
+      return gitlab.get('projects/' + $scope.current.project + '/milestones').success(function(response) {
+        $scope.milestones = response.data;
+        return gitlab.get('projects/' + $scope.current.project + '/issues').success(function(response) {
+          return $scope.issues = _.groupBy(response.data, setState);
+        });
       });
     }
   });
