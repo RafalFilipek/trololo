@@ -13,9 +13,10 @@ app = angular.module('app', ['ngResource', 'ngCookies', 'ui']).config(function($
   });
 }).run(function($rootScope, $location) {
   return $rootScope.$watch('isLogged', function() {
-    var path;
+    var currentPath, path;
     if (angular.isDefined($rootScope.isLogged)) {
-      path = $rootScope.isLogged ? '/home' : '/login';
+      currentPath = $location.path();
+      path = $rootScope.isLogged ? currentPath === '/login' ? '/home' : currentPath : '/login';
       return $location.path(path);
     }
   });

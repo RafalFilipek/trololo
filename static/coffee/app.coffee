@@ -1,5 +1,8 @@
 app = angular.module('app', ['ngResource', 'ngCookies', 'ui'])
 	.config(($routeProvider, $locationProvider)->
+
+		# Routing
+
 		$routeProvider
 			.when('/', {
 				'controller': 'EntryPointCtrl'
@@ -13,9 +16,17 @@ app = angular.module('app', ['ngResource', 'ngCookies', 'ui'])
 				'controller': 'HomeCtrl'
 			})
 	).run(($rootScope, $location)->
+
+		# I'm too lazy to check is user is logged by myself
+		# How it works? See `services.coffee`.
+
 		$rootScope.$watch('isLogged', ->
 			if angular.isDefined($rootScope.isLogged)
-				path = if $rootScope.isLogged then '/home' else '/login'
+				currentPath = $location.path()
+				path = if $rootScope.isLogged
+					if currentPath is '/login' then '/home' else currentPath
+				else
+					'/login'
 				$location.path(path)
 		)
 	)
