@@ -1,9 +1,10 @@
 <div id="home">
-	<div class="top">
+	<div class="top" ng-show="issues">
 		<ul class="columns-headers">
-			<li class="header">TODO</li>
-			<li class="header">WIP</li>
-			<li class="header">DONE</li>
+			<li class="header">TODO <span ng-bind="(issues.todo|filter:filterByMilestone).length || 0"></span></li>
+			<li class="header">WIP <span ng-bind="(issues.wip|filter:filterByMilestone).length || 0"></span></li>
+			<li class="header">DONE <span ng-bind="(issues.done|filter:filterByMilestone).length || 0"></span></li>
+			<li class="header">TRASH <span ng-bind="(issues.trash|filter:filterByMilestone).length || 0"></span></li>
 		</ul>
 	</div>
 
@@ -29,15 +30,19 @@
 
 	<div class="issues">
 		<div sortable class="column" type="todo">
-			<div class="issue" ng-repeat="issue in issues.todo" ng-include src="'issue-template'">
+			<div class="issue" ng-repeat="issue in issues.todo|filter:filterByMilestone" ng-include src="'issue-template'">
 			</div>
 		</div>
 		<div sortable class="column" items="" type="wip">
-			<div class="issue" ng-repeat="issue in issues.wip" ng-include src="'issue-template'">
+			<div class="issue" ng-repeat="issue in issues.wip|filter:filterByMilestone" ng-include src="'issue-template'">
 			</div>
 		</div>
 		<div sortable class="column" items="" type="done">
-			<div class="issue" ng-repeat="issue in issues.done" ng-include src="'issue-template'">
+			<div class="issue" ng-repeat="issue in issues.done|filter:filterByMilestone" ng-include src="'issue-template'">
+			</div>
+		</div>
+		<div sortable class="column" items="" type="done">
+			<div class="issue" ng-repeat="issue in issues.trash|filter:filterByMilestone" ng-include src="'issue-template'">
 			</div>
 		</div>
 	</div>
@@ -45,13 +50,19 @@
 	<div class="footer">
 		<ul>
 			<li ng-show="projects">
-				<select ui-select2 ng-model="currentProject" style="width: 200px;">
+				<select ui-select2 ng-model="current.project" style="width: 200px;">
 					<option ng-repeat="project in projects" value="{{ project.id }}">{{ project.name }}</option>
 				</select>
 			</li>
+			<li ng-show="milestones">
+				<select ui-select2 ng-model="current.milestone" style="width: 200px;">
+					<option value="">all</option>
+					<option ng-repeat="milestone in milestones" value="{{ milestone.id }}">{{ milestone.title }}</option>
+				</select>
+			</li>
 		</ul>
-		<ul class="toolbar-right">
-			<li ng-show="user">Hello <strong>{{ user.name || user.username }}</strong>!</li>
+		<ul class="toolbar-right" ng-show="user">
+			<li>Hello <strong>{{ user.name || user.username }}</strong>!</li>
 		</ul>
 	</div>
 
