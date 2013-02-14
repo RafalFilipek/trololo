@@ -13,9 +13,8 @@
 			{{ issue.title }}
 			<span ng-show="issue.loading">...</span>
 		</h2>
-		<p class="desc" ng-show="issue.description">
-			{{ issue.description }}
-		</p>
+		<div class="desc" ng-show="issue.description" ng-bind-html-unsafe="issue.description | markdown">
+		</div>
 		<p>
 			<span ng-show="issue.assignee">
 				<i class="icon-lock"></i>

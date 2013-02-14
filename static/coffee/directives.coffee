@@ -22,4 +22,3 @@ app.directive('sortable', ->
 			}).disableSelection()
 	}
 )
-

@@ -4,4 +4,8 @@ app.filter('formatDate', function() {
   return function(date) {
     return new Date(date).getTime();
   };
+}).filter('markdown', function() {
+  return function(text) {
+    return marked(text);
+  };
 });
