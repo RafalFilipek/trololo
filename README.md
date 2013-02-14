@@ -17,6 +17,7 @@
  * Show project milestones
  * Filter issues by milestone
  * Group issues by labels ( `todo`, `wip`, `done`, `trash` )
+ * Markdown for descriptions
 
 #### 12.02.2013
 
